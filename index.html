@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOV Calculator - Material Design</title>
+    
+    <!-- Material Design CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <!-- FontAwesome Pro -->
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .description {
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .grid {
+            display: grid;
+            gap: 24px;
+        }
+        
+        .grid-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section-title {
+            color: #1976d2;
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        
+        .slider-container {
+            margin: 1rem 0;
+        }
+        
+        .slider-label {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: #333;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e0e0e0;
+            outline: none;
+            appearance: none;
+            margin-bottom: 16px;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #1976d2;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #1976d2;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .slider.secondary::-webkit-slider-thumb {
+            background: #dc004e;
+        }
+        
+        .slider.secondary::-moz-range-thumb {
+            background: #dc004e;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+        }
+        
+        .result-card.secondary {
+            background: linear-gradient(135deg, #dc004e 0%, #b71c1c 100%);
+        }
+        
+        .result-label {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .result-label i {
+            font-size: 1.1rem;
+        }
+        
+        .result-value {
+            font-size: 3rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        
+        .calc-btn {
+            width: 100%;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .calc-btn:hover {
+            background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+        }
+        
+        .calc-btn:active {
+            transform: translateY(0);
+        }
+        
+        .section-divider {
+            margin: 24px 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #e0e0e0 50%, transparent 100%);
+            border: none;
+        }
+        
+        
+        .resolution-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .resolution-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+            border-color: #1976d2;
+            background: #f0f8ff;
+        }
+        
+        .resolution-main {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .resolution-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .resolution-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .aspect-ratio {
+            font-size: 13px;
+            font-weight: 500;
+            color: #1976d2;
+            background: rgba(25, 118, 210, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        
+        
+        
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .popup {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .popup-large {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 600px;
+            width: 95%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .popup-content {
+            margin-top: 16px;
+        }
+        
+        .popup-section {
+            margin-bottom: 32px;
+        }
+        
+        .popup-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .popup-section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 8px;
+        }
+        
+        .popup-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, #e0e0e0 50%, transparent 100%);
+            margin: 24px 0;
+        }
+        
+        .popup-advanced {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .popup-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .popup-input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .popup-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 6px;
+        }
+        
+        .popup-input {
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .popup-input:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+        }
+        
+        .popup-apply-btn {
+            width: 100%;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+        
+        .popup-apply-btn:hover {
+            background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+            transform: translateY(-1px);
+        }
+        
+        .popup-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .popup-grid {
+            display: grid;
+            gap: 8px;
+        }
+        
+        .popup-item {
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .popup-item:hover {
+            border-color: #1976d2;
+            background: #f0f8ff;
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 32px 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .footer-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        .footer-link {
+            color: #ffd700;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: #fff;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+        }
+        
+        .github-icon {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .github-icon:hover {
+            color: #fff;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Field of View Calculator</h1>
+        <p class="description">Bidirectional FOV conversion for gaming & displays</p>
+        
+        
+        <div class="grid grid-2">
+            <div class="card">
+                <h2 class="section-title">Input Parameters</h2>
+                
+                <div class="resolution-card clickable" onclick="showResolutionMenu()">
+                    <div class="resolution-main">
+                        <span class="resolution-label">Resolution:</span>
+                        <span class="resolution-value" id="inputResolutionInfo">2560 × 1440</span>
+                    </div>
+                    <span class="aspect-ratio" id="inputAspectRatioInfo">16:9</span>
+                </div>
+                
+                <div class="slider-container">
+                    <div class="slider-label">Horizontal FOV: <span id="hfovDisplay">90</span>°</div>
+                    <input type="range" id="hfovSlider" class="slider" min="30" max="170" value="90" oninput="updateHorizontalSlider()">
+                    <div class="input-group">
+                        <label class="input-label" for="hfov">Horizontal FOV (degrees)</label>
+                        <input type="number" id="hfov" class="input-field" value="90" min="30" max="170" step="0.1" oninput="updateFromHorizontalInput()">
+                    </div>
+                </div>
+                
+                <div class="slider-container">
+                    <div class="slider-label">Vertical FOV: <span id="vfovDisplay">59</span>°</div>
+                    <input type="range" id="vfovSlider" class="slider secondary" min="20" max="120" value="59" oninput="updateVerticalSlider()">
+                    <div class="input-group">
+                        <label class="input-label" for="vfov">Vertical FOV (degrees)</label>
+                        <input type="number" id="vfov" class="input-field" value="59" min="20" max="120" step="0.1" oninput="updateFromVerticalInput()">
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="card">
+                <h2 class="section-title">Results</h2>
+                
+                <div class="result-card">
+                    <div class="result-label">
+                        <i class="fa-solid fa-reflect-horizontal"></i>
+                        Horizontal FOV
+                    </div>
+                    <div class="result-value" id="hfovResult">90°</div>
+                </div>
+                
+                <div class="result-card secondary">
+                    <div class="result-label">
+                        <i class="fa-solid fa-reflect-vertical"></i>
+                        Vertical FOV
+                    </div>
+                    <div class="result-value" id="vfovResult">59°</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <div class="footer-content">
+                <p class="footer-text">
+                    Made with ❤️ by <a href="https://github.com/Kurosar" target="_blank" class="footer-link">Kurosar</a>
+                </p>
+                <a href="https://github.com/Kurosar/FOVCalculator" target="_blank" class="github-icon">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Enhanced Resolution Popup -->
+    <div class="popup-overlay" id="resolutionPopup">
+        <div class="popup-large">
+            <button class="popup-close" onclick="hidePopups()">×</button>
+            <div class="popup-title">Resolution Settings</div>
+            
+            <div class="popup-content">
+                <!-- Preset Section -->
+                <div class="popup-section">
+                    <h3 class="popup-section-title">Quick Presets</h3>
+                    <div class="popup-grid">
+                        <div class="popup-item" onclick="selectResolution(1920, 1080, 'FHD')">1920×1080 (FHD) - 16:9</div>
+                        <div class="popup-item" onclick="selectResolution(2560, 1440, 'QHD')">2560×1440 (QHD) - 16:9</div>
+                        <div class="popup-item" onclick="selectResolution(3840, 2160, '4K')">3840×2160 (4K) - 16:9</div>
+                        <div class="popup-item" onclick="selectResolution(3440, 1440, 'UWQHD')">3440×1440 (UWQHD) - 21:9</div>
+                        <div class="popup-item" onclick="selectResolution(5120, 1440, 'DQHD')">5120×1440 (DQHD) - 32:9</div>
+                        <div class="popup-item" onclick="selectResolution(1280, 720, 'HD')">1280×720 (HD) - 16:9</div>
+                        <div class="popup-item" onclick="selectResolution(1366, 768, 'WXGA')">1366×768 (WXGA) - 16:9</div>
+                        <div class="popup-item" onclick="selectResolution(1600, 900, 'HD+')">1600×900 (HD+) - 16:9</div>
+                    </div>
+                </div>
+                
+                <!-- Divider -->
+                <div class="popup-divider"></div>
+                
+                <!-- Advanced Settings Section -->
+                <div class="popup-section">
+                    <h3 class="popup-section-title">Custom Settings</h3>
+                    
+                    <div class="popup-advanced">
+                        <div class="popup-row">
+                            <div class="popup-input-group">
+                                <label class="popup-label" for="width">Width (pixels)</label>
+                                <input type="number" id="width" class="popup-input" value="2560" min="1" max="10000" oninput="calculateVFOVFromHFOV()">
+                            </div>
+                            <div class="popup-input-group">
+                                <label class="popup-label" for="height">Height (pixels)</label>
+                                <input type="number" id="height" class="popup-input" value="1440" min="1" max="10000" oninput="calculateVFOVFromHFOV()">
+                            </div>
+                        </div>
+                        
+                        <div class="popup-row">
+                            <div class="popup-input-group">
+                                <label class="popup-label" for="aspectWidth">Aspect Width</label>
+                                <input type="number" id="aspectWidth" class="popup-input" value="16" min="1" max="100" oninput="updateFromAspectRatio()">
+                            </div>
+                            <div class="popup-input-group">
+                                <label class="popup-label" for="aspectHeight">Aspect Height</label>
+                                <input type="number" id="aspectHeight" class="popup-input" value="9" min="1" max="100" oninput="updateFromAspectRatio()">
+                            </div>
+                        </div>
+                        
+                        <button class="popup-apply-btn" onclick="applyAspectRatio()">Apply Aspect Ratio to Resolution</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Calculate vertical FOV from horizontal FOV
+        function calculateVFOVFromHFOV() {
+            const width = parseFloat(document.getElementById('width').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const hfov = parseFloat(document.getElementById('hfov').value);
+            
+            if (width > 0 && height > 0 && hfov > 0) {
+                const hfovRad = hfov * Math.PI / 180;
+                const vfovRad = 2 * Math.atan(Math.tan(hfovRad / 2) * height / width);
+                const vfovDeg = Math.round(vfovRad * 180 / Math.PI * 10) / 10; // Round to 1 decimal
+                
+                document.getElementById('vfov').value = vfovDeg;
+                document.getElementById('vfovSlider').value = vfovDeg;
+                document.getElementById('vfovDisplay').textContent = vfovDeg;
+                document.getElementById('vfovResult').textContent = vfovDeg + '°';
+                
+                updateInfo();
+            }
+        }
+        
+        // Calculate horizontal FOV from vertical FOV
+        function calculateHFOVFromVFOV() {
+            const width = parseFloat(document.getElementById('width').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const vfov = parseFloat(document.getElementById('vfov').value);
+            
+            if (width > 0 && height > 0 && vfov > 0) {
+                const vfovRad = vfov * Math.PI / 180;
+                const hfovRad = 2 * Math.atan(Math.tan(vfovRad / 2) * width / height);
+                const hfovDeg = Math.round(hfovRad * 180 / Math.PI * 10) / 10; // Round to 1 decimal
+                
+                document.getElementById('hfov').value = hfovDeg;
+                document.getElementById('hfovSlider').value = hfovDeg;
+                document.getElementById('hfovDisplay').textContent = hfovDeg;
+                document.getElementById('hfovResult').textContent = hfovDeg + '°';
+                
+                updateInfo();
+            }
+        }
+        
+        // Update info display
+        function updateInfo() {
+            const width = parseFloat(document.getElementById('width').value);
+            const height = parseFloat(document.getElementById('height').value);
+            
+            // Update input resolution card
+            document.getElementById('inputResolutionInfo').textContent = width + ' × ' + height;
+            updateAspectRatioDisplay(width, height);
+        }
+        
+        // Update aspect ratio display to show traditional format
+        function updateAspectRatioDisplay(width, height) {
+            const ratio = width / height;
+            let aspectText = '';
+            
+            // Check for common aspect ratios
+            if (Math.abs(ratio - 16/9) < 0.01) aspectText = '16:9';
+            else if (Math.abs(ratio - 16/10) < 0.01) aspectText = '16:10';
+            else if (Math.abs(ratio - 21/9) < 0.01) aspectText = '21:9';
+            else if (Math.abs(ratio - 4/3) < 0.01) aspectText = '4:3';
+            else if (Math.abs(ratio - 5/4) < 0.01) aspectText = '5:4';
+            else {
+                // Calculate closest simple ratio
+                const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+                const w = Math.round(width);
+                const h = Math.round(height);
+                const divisor = gcd(w, h);
+                aspectText = `${w/divisor}:${h/divisor}`;
+            }
+            
+            document.getElementById('inputAspectRatioInfo').textContent = aspectText;
+        }
+        
+        // Horizontal FOV slider functions
+        function updateHorizontalSlider() {
+            const slider = document.getElementById('hfovSlider');
+            const input = document.getElementById('hfov');
+            const display = document.getElementById('hfovDisplay');
+            
+            input.value = slider.value;
+            display.textContent = slider.value;
+            document.getElementById('hfovResult').textContent = slider.value + '°';
+            calculateVFOVFromHFOV();
+        }
+        
+        function updateFromHorizontalInput() {
+            const input = document.getElementById('hfov');
+            const slider = document.getElementById('hfovSlider');
+            const display = document.getElementById('hfovDisplay');
+            
+            slider.value = input.value;
+            display.textContent = input.value;
+            document.getElementById('hfovResult').textContent = input.value + '°';
+            calculateVFOVFromHFOV();
+        }
+        
+        // Vertical FOV slider functions
+        function updateVerticalSlider() {
+            const slider = document.getElementById('vfovSlider');
+            const input = document.getElementById('vfov');
+            const display = document.getElementById('vfovDisplay');
+            
+            input.value = slider.value;
+            display.textContent = slider.value;
+            document.getElementById('vfovResult').textContent = slider.value + '°';
+            calculateHFOVFromVFOV();
+        }
+        
+        function updateFromVerticalInput() {
+            const input = document.getElementById('vfov');
+            const slider = document.getElementById('vfovSlider');
+            const display = document.getElementById('vfovDisplay');
+            
+            slider.value = input.value;
+            display.textContent = input.value;
+            document.getElementById('vfovResult').textContent = input.value + '°';
+            calculateHFOVFromVFOV();
+        }
+        
+        // Set resolution preset
+        function setResolution(width, height) {
+            document.getElementById('width').value = width;
+            document.getElementById('height').value = height;
+            calculateVFOVFromHFOV();
+        }
+        
+        // Set aspect ratio preset
+        function setAspectRatio(ratioWidth, ratioHeight) {
+            document.getElementById('aspectWidth').value = ratioWidth;
+            document.getElementById('aspectHeight').value = ratioHeight;
+            
+            const currentWidth = parseFloat(document.getElementById('width').value);
+            if (currentWidth > 0) {
+                const newHeight = Math.round(currentWidth * ratioHeight / ratioWidth);
+                document.getElementById('height').value = newHeight;
+            } else {
+                document.getElementById('width').value = ratioWidth * 160; // Default scaling for 1440p
+                document.getElementById('height').value = ratioHeight * 160;
+            }
+            calculateVFOVFromHFOV();
+        }
+        
+        // Apply aspect ratio to resolution
+        function applyAspectRatio() {
+            const aspectWidth = parseFloat(document.getElementById('aspectWidth').value);
+            const aspectHeight = parseFloat(document.getElementById('aspectHeight').value);
+            const currentWidth = parseFloat(document.getElementById('width').value);
+            
+            if (aspectWidth > 0 && aspectHeight > 0 && currentWidth > 0) {
+                const newHeight = Math.round(currentWidth * aspectHeight / aspectWidth);
+                document.getElementById('height').value = newHeight;
+                calculateVFOVFromHFOV();
+            }
+        }
+        
+        // Update aspect ratio fields when resolution changes
+        function updateFromAspectRatio() {
+            // This function can be used to provide real-time feedback
+            // Currently just for input validation
+        }
+        
+        
+        // Popup functions
+        function showResolutionMenu() {
+            document.getElementById('resolutionPopup').style.display = 'flex';
+        }
+        
+        function hidePopups() {
+            document.getElementById('resolutionPopup').style.display = 'none';
+        }
+        
+        function selectResolution(width, height, name) {
+            document.getElementById('width').value = width;
+            document.getElementById('height').value = height;
+            calculateVFOVFromHFOV();
+            hidePopups();
+        }
+        
+        // Close popup when clicking overlay
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('popup-overlay')) {
+                hidePopups();
+            }
+        });
+        
+        // Initialize calculator
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateVFOVFromHFOV();
+        });
+    </script>
+</body>
+</html>
